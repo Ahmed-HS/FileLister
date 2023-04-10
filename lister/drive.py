@@ -2,7 +2,6 @@ import os
 from google.oauth2.credentials import Credentials
 from allauth.socialaccount.models import SocialToken
 from googleapiclient.discovery import build
-from urllib.parse import urlparse
 
 
 def getFiles(user, folderId):
