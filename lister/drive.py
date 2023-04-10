@@ -14,8 +14,8 @@ def getFiles(user, url):
             token=token.token,
             refresh_token=token.token_secret,
             token_uri='https://oauth2.googleapis.com/token',
-            client_id=os.getenv('client-id', ""),
-            client_secret=os.getenv('client-secret', ""))
+            client_id=os.getenv('clientId', ""),
+            client_secret=os.getenv('clientSecret', ""))
         
         service = build('drive', 'v3', credentials=credentials)
 
