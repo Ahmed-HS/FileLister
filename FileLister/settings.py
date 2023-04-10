@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-z_ya+6%()f(@(j-dudad1+d03sxn6asa1s2n8*45g^ub9z_*=e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -152,7 +152,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': [
             'profile',
             'email',
-            'https://www.googleapis.com/auth/drive.readonly',
+            'https://www.googleapis.com/auth/drive.metadata.readonly',
         ],
         'AUTH_PARAMS': {
             'access_type': 'offline',
