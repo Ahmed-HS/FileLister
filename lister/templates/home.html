@@ -1,0 +1,39 @@
+{% extends "baseTemplate.html" %}
+
+
+
+{% block content %}
+
+<div class="container text-center">
+
+    <form class="d-grid gap-2 col-12 my-4" method="post" action="{% url 'account_logout' %}">
+
+        <div class="input-group mb-3">
+            <input id="urlInput"type="text" class="form-control" placeholder="Enter folder URL" aria-label="Url">
+        </div>
+        <button id="searchBtn" type="button" class="btn btn-primary">Search</button>
+        <script>
+            searchBtn = document.getElementById("searchBtn")
+            searchBtn.onclick = () => {
+                url = document.getElementById("urlInput").value;
+                if(!url.startsWith("https://drive.google.com/drive/folders/")) {
+                    alert("Please enter a valid google drive folder url")
+                    return
+                }
+                fetch(window.location.origin + `/lister/home?url=${url}`)
+                .then((response) => response.text())
+                .then((html) => {
+                    document.getElementById("searchResults").innerHTML = html;
+                });
+            }
+        </script>
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Sign Out</button>
+    </form>
+
+    <div id="searchResults">
+        <p>Enter a google drive folder URL to view its contents </p>
+    </div>
+</div>
+
+{% endblock %}
