@@ -7,14 +7,15 @@ from .drive import getFiles
 def login(request):
     if request.user.is_authenticated:
         return redirect("/lister/home/")
-    
-    return render(request,"login.html")
+
+    return render(request, "login.html")
+
 
 def home(request):
-    urlToSearch = request.GET.get("url")
-    urlNotFound = True if(urlToSearch is None) else False
-    filesList = [] if (urlNotFound) else getFiles(request.user,urlToSearch)
-    context = {"filesList" : filesList}
-    pageToServe = "home.html" if(urlNotFound) else "filesList.html"
-    return render(request,pageToServe,context=context)
+    if not request.user.is_authenticated:
+        return redirect("/lister/login/")
 
+    folderId = request.GET.get("folderId","root")
+    filesList = getFiles(request.user, folderId)
+    context = {"filesList": filesList , "folderId" : folderId}
+    return render(request, "home.html", context=context)

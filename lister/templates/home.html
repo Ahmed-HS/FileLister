@@ -4,36 +4,67 @@
 
 {% block content %}
 
-<div class="container text-center">
+<style>
+    ul {
+        overflow: scroll;
+        max-height: 70vh;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 
-    <form class="d-grid gap-2 col-12 my-4" method="post" action="{% url 'account_logout' %}">
+    ul::-webkit-scrollbar {
+        display: none;
+    }
+</style>
 
-        <div class="input-group mb-3">
-            <input id="urlInput"type="text" class="form-control" placeholder="Enter folder URL" aria-label="Url">
-        </div>
-        <button id="searchBtn" type="button" class="btn btn-primary">Search</button>
-        <script>
-            searchBtn = document.getElementById("searchBtn")
-            searchBtn.onclick = () => {
-                url = document.getElementById("urlInput").value;
-                if(!url.startsWith("https://drive.google.com/drive/folders/")) {
-                    alert("Please enter a valid google drive folder url")
-                    return
-                }
-                fetch(window.location.origin + `/lister/home?url=${url}`)
-                .then((response) => response.text())
-                .then((html) => {
-                    document.getElementById("searchResults").innerHTML = html;
-                });
-            }
-        </script>
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Sign Out</button>
-    </form>
+<form class="d-grid gap-2 col-12 my-4" method="post" action="{% url 'account_logout' %}">
 
-    <div id="searchResults">
-        <p>Enter a google drive folder URL to view its contents </p>
+    <div class="input-group mb-3">
+        <input id="urlInput" type="text" class="form-control" placeholder="Enter folder URL" aria-label="Url"
+            value="https://drive.google.com/drive/folders/{{folderId}}">
     </div>
-</div>
+    <button id="searchBtn" type="button" class="btn btn-primary">Search</button>
+
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Sign Out</button>
+</form>
+
+{% if filesList %}
+<ul class="list-group list-group-flush">
+
+    {% for file in filesList %}
+    {% if file.isFolder %}
+    <li>
+        <a class="list-group-item list-group-item-action link-primary" href="/lister/home?folderId={{file.id}}"><i
+                class="fa-solid fa-folder mx-2"></i>{{file.name}}</a>
+    </li>
+    {% else %}
+    <li class="list-group-item">
+        <i class="fa-solid fa-file mx-2"></i>
+        {{file.name}}
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% else %}
+<p>No files found</p>
+{% endif %}
+<script>
+    searchBtn = document.getElementById("searchBtn")
+
+    function search(url) {
+        const parts = url.split('/');
+        folderId = parts.at(-1);
+        window.open(`/lister/home?folderId=${folderId}`, "_self")
+    }
+    searchBtn.onclick = () => {
+        url = document.getElementById("urlInput").value;
+        if (!url.startsWith("https://drive.google.com/drive/folders/")) {
+            alert("Please enter a valid google drive folder url")
+            return
+        }
+        search(url)
+    }
+</script>
 
 {% endblock %}

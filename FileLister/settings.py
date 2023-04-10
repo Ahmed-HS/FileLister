@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lister.apps.ListerConfig',
-     # The following apps are required for authentiction:
+     # The following apps are required for authentication:
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -144,6 +144,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = "/lister/login"
+
+SOCIALACCOUNT_STORE_TOKENS = True
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
